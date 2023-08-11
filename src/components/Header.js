@@ -1,8 +1,8 @@
 const Header = () => {
   return(
-    <h1>
-      Quiz
-    </h1>
+  <header className='app-header'>
+    <h1>Quiz</h1>
+  </header>
   )
 };
 

@@ -5,6 +5,7 @@ import StartQuiz from "./components/StartQuiz";
 import Question from "./components/Question";
 import NextQuestion from "./components/NextQuestion";
 import Progress from "./components/Progress";
+import FinishTest from "./components/FinishTest";
 
 
 const initialState = {
@@ -13,7 +14,8 @@ const initialState = {
   status: 'loading',
   index: 0,
   answer: null,
-  points: 0
+  points: 0,
+  highScore: 0
 }
 
 const reducer = (state, action) => {
@@ -34,6 +36,12 @@ const reducer = (state, action) => {
           ...state,
           status: 'active'
         }
+      case 'reStart':
+        return {
+          ...initialState,
+          questions: state.questions,
+          status: "ready"
+        }
 
 
       case 'newAnswer':
@@ -50,6 +58,12 @@ const reducer = (state, action) => {
           index: state.index + 1,
           answer: null
         }
+      case 'finisTest':
+        return{
+          ...state,
+          status: 'finished',
+          highScore: state.points > state.highScore ? state.points : state.highScore
+        }
 
       default:
         throw new Error ('unknown')
@@ -65,6 +79,7 @@ function App() {
   const index = state.index
   const answer = state.answer
   const points = state.points
+  const highScore = state.highScore
 
   useEffect(function(){
       fetch('http://localhost:8000/questions')
@@ -82,8 +97,10 @@ function App() {
         {state.status === 'active' &&
         <>
         <Progress numQuestions={numQuestions} index={index} points={points} maxPoints={maxPoints}/>
-        <Question question={questions[index]} dispatch={dispatch} answer={answer}/> <NextQuestion dispatch={dispatch} answer={answer}/>
+        <Question question={questions[index]} dispatch={dispatch} answer={answer}/> <NextQuestion dispatch={dispatch} answer={answer} index={index} numQuestions={numQuestions}/>
         </>}
+        {state.status==='finished' && <FinishTest numQuestions={numQuestions} points={points} highScore={highScore} maxPoints={maxPoints} dispatch={dispatch}/>}
+
       </Main>
 
     </>
