@@ -1,11 +1,11 @@
 import React from 'react'
 
-const StartQuiz = ({numQuestions}) => {
+const StartQuiz = ({numQuestions, dispatch}) => {
   return (
     <div>
       <h2>Welcome to the Quiz</h2>
       <p>{numQuestions} questions to test your knowledge</p>
-      <button>Lets start</button>
+      <button onClick={()=>{dispatch({type: "start"})}}>Lets start</button>
     </div>
   )
 }
